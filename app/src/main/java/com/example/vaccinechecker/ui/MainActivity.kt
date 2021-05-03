@@ -266,6 +266,11 @@ class MainActivity : AppCompatActivity() {
                         allSessions = allSessions.filter { session ->
                             ageVal >= session.min_age_limit!! && session.available_capacity!! > 0
                         }.toMutableList()
+                        if(allSessions.size == 0){
+                            binding.noDataFound.visibility = View.VISIBLE;
+                        }else{
+                            binding.noDataFound.visibility = View.GONE;
+                        }
                         (binding.recyclerView.adapter as SessionAdaptor).submitList(allSessions);
                     }else{
 
@@ -276,6 +281,11 @@ class MainActivity : AppCompatActivity() {
                                 ageVal >= session.min_age_limit!! && session.available_capacity!! > 0
                             }.toMutableList()
 
+                            if(list.size == 0){
+                                binding.noDataFound.visibility = View.VISIBLE;
+                            }else{
+                                binding.noDataFound.visibility = View.GONE;
+                            }
                             (binding.recyclerView.adapter as SessionAdaptor).submitList(list);
 
                         }
@@ -283,9 +293,20 @@ class MainActivity : AppCompatActivity() {
 
                 }else{
                     if( position == 0){
+                        if(allSessions.size == 0){
+                            binding.noDataFound.visibility = View.VISIBLE;
+                        }else{
+                            binding.noDataFound.visibility = View.GONE;
+                        }
                         (binding.recyclerView.adapter as SessionAdaptor).submitList(allSessions);
                     }else{
-                        (binding.recyclerView.adapter as SessionAdaptor).submitList(viewmodel.vaccineLocationResponse.value?.centers?.get(position-1)?.sessions);
+                        val list = viewmodel.vaccineLocationResponse.value?.centers?.get(position-1)?.sessions
+                        if(list!!.size == 0){
+                            binding.noDataFound.visibility = View.VISIBLE;
+                        }else{
+                            binding.noDataFound.visibility = View.GONE;
+                        }
+                        (binding.recyclerView.adapter as SessionAdaptor).submitList(list);
                     }
                 }
 
