@@ -236,6 +236,7 @@ class MainActivity : AppCompatActivity() {
             it.centers?.forEachIndexed { index, center ->
                 center.sessions?.forEach { session ->
                     session.block_name = center.name
+                    session.pincode = center.pincode
                     allSessions.add(session)
                 }
             }

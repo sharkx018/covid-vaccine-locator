@@ -29,6 +29,7 @@ class SessionAdaptor: ListAdapter<Session, SessionAdaptor.SessionRowViewHolder>(
         holder.binding.slot4.text = session.slots?.get(3) ?: ""
 
         holder.binding.centerVal.text = "Center Name: ${session.block_name}";
+        holder.binding.pincodeVal.text = "Pincode: ${session.pincode}";
         holder.binding.vaccineVal.text = "${session.vaccine}";
 
     }

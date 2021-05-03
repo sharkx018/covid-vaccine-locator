@@ -91,9 +91,8 @@
             android:layout_marginTop="8dp"
             android:text="Min Age: "
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/center_val" />
+            app:layout_constraintTop_toBottomOf="@+id/pincode_val" />
 
         <TextView
             android:id="@+id/center_val"
@@ -151,6 +150,16 @@
             app:layout_constraintEnd_toEndOf="@+id/slot1"
             app:layout_constraintStart_toStartOf="@+id/slot1"
             app:layout_constraintTop_toBottomOf="@+id/minage_label" />
+
+        <TextView
+            android:id="@+id/pincode_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Pincode:"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/center_val" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2,7 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.MainActivity"
+    >
 
     <data>
 
@@ -179,6 +180,7 @@
             android:layout_marginTop="19dp"
             android:layout_marginBottom="7dp"
             android:text="Age:"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/age_editText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/age_editText" />
@@ -189,7 +191,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
             android:ems="10"
             android:inputType="number"
             app:layout_constraintStart_toEndOf="@+id/textView9"
