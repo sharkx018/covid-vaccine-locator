@@ -15,8 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.vaccinechecker.data.model.locations.Session
 import com.example.vaccinechecker.databinding.ActivityMainBinding
 import com.google.gson.GsonBuilder
+import java.lang.Exception
 import java.util.*
 import java.util.regex.Pattern
 import kotlin.collections.HashMap
@@ -43,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     private  var mMonth:Int = 0
     private  var mDay:Int = 0
 
+    var allSessions = mutableListOf<Session>()
+
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +56,9 @@ class MainActivity : AppCompatActivity() {
 
         viewmodel = ViewModelProviders.of(this).get(MainViewModel::class.java);
 
-
         setupRecyclerView();
 
         val queryMap = HashMap<String, String>();
-
 
         binding.toggleLabel.setOnClickListener {
             districtId  =-1;
@@ -159,7 +161,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewmodel.getStates()
-
         viewmodel.statesResponse.observe(this) {
             sLists = mutableListOf<String>();
             it.states?.forEachIndexed { index, state ->
@@ -179,7 +180,6 @@ class MainActivity : AppCompatActivity() {
                 id: Long
             ) {
                 districtId = -1;
-                Log.d("lll", "$id, $position");
                 viewmodel.getDistrictsByStates(position);
             }
 
@@ -206,11 +206,8 @@ class MainActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-
                 districtId = viewmodel.districtsResponse.value?.districts?.get(position)?.district_id ?: -1;
                 queryMap["district_id"] = districtId.toString();
-
-
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
@@ -220,22 +217,29 @@ class MainActivity : AppCompatActivity() {
 
         viewmodel.vaccineLocationResponse.observe(this) {
 
+            allSessions = mutableListOf()
+            cList = mutableListOf()
+
             if(it.centers?.size == 0){
                 Toast.makeText(this, "Center not found, Sorry...", Toast.LENGTH_SHORT).show();
                 return@observe
             }
-            Log.d(
-                "kkk",
-                GsonBuilder().setPrettyPrinting().create().toJson(it.centers?.get(0)?.sessions)
-            );
-            cList = mutableListOf()
+
+            // center name spinner
+            cList.add(0, "All Centres");
             it.centers?.forEachIndexed { index, center ->
                 cList.add(center.name!!);
             }
-
             centerAdaptor = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, cList);
             binding.vaccineCenterSpinner.adapter = centerAdaptor;
-//            (binding.recyclerView.adapter as SessionAdaptor).submitList(it.centers?.get(0)?.sessions);
+
+            it.centers?.forEachIndexed { index, center ->
+                center.sessions?.forEach { session ->
+                    session.block_name = center.name
+                    allSessions.add(session)
+                }
+            }
+
         }
         binding.vaccineCenterSpinner.setOnItemSelectedListener(object :
             OnItemSelectedListener {
@@ -246,7 +250,44 @@ class MainActivity : AppCompatActivity() {
                 id: Long
             ) {
 
-                (binding.recyclerView.adapter as SessionAdaptor).submitList(viewmodel.vaccineLocationResponse.value?.centers?.get(position)?.sessions);
+                val age = binding.ageEditText.text.toString()
+                if(age.length > 0)
+                {
+                    var ageVal: Int;
+                    try {
+                        ageVal = age.toInt();
+                    }catch (e:Exception){
+                        Toast.makeText(this@MainActivity, "Please enter valid age", Toast.LENGTH_SHORT).show();
+                        return
+                    }
+
+                    if( position == 0){
+                        allSessions = allSessions.filter { session ->
+                            ageVal >= session.min_age_limit!! && session.available_capacity!! > 0
+                        }.toMutableList()
+                        (binding.recyclerView.adapter as SessionAdaptor).submitList(allSessions);
+                    }else{
+
+                        var list = viewmodel.vaccineLocationResponse.value?.centers?.get(position-1)?.sessions
+                        if (list != null) {
+
+                            list = list.filter { session ->
+                                ageVal >= session.min_age_limit!! && session.available_capacity!! > 0
+                            }.toMutableList()
+
+                            (binding.recyclerView.adapter as SessionAdaptor).submitList(list);
+
+                        }
+                    }
+
+                }else{
+                    if( position == 0){
+                        (binding.recyclerView.adapter as SessionAdaptor).submitList(allSessions);
+                    }else{
+                        (binding.recyclerView.adapter as SessionAdaptor).submitList(viewmodel.vaccineLocationResponse.value?.centers?.get(position-1)?.sessions);
+                    }
+                }
+
 
             }
 

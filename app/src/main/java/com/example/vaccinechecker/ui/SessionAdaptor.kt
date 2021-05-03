@@ -28,6 +28,9 @@ class SessionAdaptor: ListAdapter<Session, SessionAdaptor.SessionRowViewHolder>(
         holder.binding.slot3.text = session.slots?.get(2) ?: ""
         holder.binding.slot4.text = session.slots?.get(3) ?: ""
 
+        holder.binding.centerVal.text = "Center Name: ${session.block_name}";
+        holder.binding.vaccineVal.text = "${session.vaccine}";
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SessionRowViewHolder {

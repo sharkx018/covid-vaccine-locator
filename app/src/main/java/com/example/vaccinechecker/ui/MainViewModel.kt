@@ -69,12 +69,9 @@ class MainViewModel(context: Application) : AndroidViewModel(context) {
         viewModelScope.launch {
             if (hasInternetConnection()) {
                 try {
-                    loading.value = true;
                     statesResponse.value = repo.getStates()
-                    loading.value = false;
                     Log.d("log", GsonBuilder().setPrettyPrinting().create().toJson(statesResponse.value));
                 } catch (e: Exception) {
-                    loading.value = false;
                     Toast.makeText(getApplication(), "Catch: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -87,12 +84,8 @@ class MainViewModel(context: Application) : AndroidViewModel(context) {
         viewModelScope.launch {
             if (hasInternetConnection()) {
                 try {
-                    loading.value = true;
                     districtsResponse.value = repo.getDistricts(id)
-                    loading.value = false;
-                    Log.d("log", GsonBuilder().setPrettyPrinting().create().toJson(districtsResponse.value));
                 } catch (e: Exception) {
-                    loading.value = false;
                     Toast.makeText(getApplication(), "Catch: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }

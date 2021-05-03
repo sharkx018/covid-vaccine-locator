@@ -23,5 +23,6 @@ data class Session(
     val min_age_limit: Int? = null,
     val session_id: String? = null,
     val slots: List<String>? = null,
-    val vaccine: String? = null
+    val vaccine: String? = null,
+    var block_name: String? = null
 )

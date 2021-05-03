@@ -29,9 +29,6 @@ class VaccineLocatorRepo(context: Application)  {
     }
 
 
-
-
-
     suspend fun getDataByDistrict(map: HashMap<String,String>): VaccineLocationRes? {
 
         val res = api?.getDataByDistrict(map)
